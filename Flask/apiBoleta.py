@@ -8,15 +8,15 @@ app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-url_cliente = "http://localhost:5103/api/Cliente"
-url_producto = "http://localhost:5103/api/Producto"
+url_cliente = "http://localhost:5009/api/Cliente"
+url_producto = "http://localhost:5009/api/Producto"
 
 def generar_id_boleta():
     return str(random.randint(10000000, 99999999))
 
 class Factura(Resource):
     def post(self):
-        # Definimos un objeto para la respuesta de la boleta
+     
         objRespuesta = {
             "id_boleta": generar_id_boleta(),
             "items": [],
@@ -24,22 +24,21 @@ class Factura(Resource):
             "total_boleta": 0
         }
 
-        # Capturamos el JSON que nos llega
+       
         data = request.get_json()
 
-        # Validamos si las claves necesarias están presentes en el JSON
+    
         required_keys = ["Rut", "id_producto", "cantidad"]
         if not all(key in data for key in required_keys):
             return {"error": "Faltan claves en la solicitud. Se requieren 'Rut', 'id_producto', y 'cantidad'."}, 400
 
-        # Obtenemos datos del cliente
+   
         cliente_response = requests.get(url_cliente + "/" + str(data["Rut"]))
         if cliente_response.status_code != 200:
             return {"error": f"No se pudo obtener el cliente con Rut {data['Rut']}"}, cliente_response.status_code
 
         cliente_json = cliente_response.json()
 
-        # Obtenemos datos del producto
         producto_response = requests.get(url_producto + "/" + str(data["id_producto"]))
         if producto_response.status_code != 200:
             return {"error": f"No se pudo obtener el producto con id {data['id_producto']}"}, producto_response.status_code

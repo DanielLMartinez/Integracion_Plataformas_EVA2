@@ -1,20 +1,23 @@
-﻿using API1;
+﻿using Hola;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace API1.Controller
+namespace Hola.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase
     {
-
         private static IList<Cliente> _clientes = new List<Cliente>()
         {
-            new Cliente {  Rut = 12345678-9, Nombre = "Sebastian", Apellido = "Contreras", Direccion = "Av siempre viva 0110", Telefono = 1733737 },
-            new Cliente {  Rut = 17524577-2, Nombre = "Augusto", Apellido = "Pfeifer", Direccion = "Av calle del piso 1234", Telefono = 693463464 },
-            new Cliente {  Rut = 16345455-3, Nombre = "Sergio", Apellido = "Mellado", Direccion = "pasaje callado 584", Telefono = 618861168 },
-            new Cliente {  Rut = 26756563-6, Nombre = "Daniel", Apellido = "Martinez", Direccion = "Mirador de arriba 843", Telefono = 538431 }
+            new Cliente { Id = 1, Rut = 12345678, Nombre = "Sebastian", Apellido = "Contreras", Direccion = "Av siempre viva 0110", Telefono = 1733737 },
+            new Cliente { Id = 2, Rut = 17524577, Nombre = "Augusto", Apellido = "Pfeifer", Direccion = "Av calle del piso 1234", Telefono = 693463464 },
+            new Cliente { Id = 3, Rut = 16345455, Nombre = "Sergio", Apellido = "Mellado", Direccion = "pasaje callado 584", Telefono = 618861168 },
+            new Cliente { Id = 4, Rut = 26756563, Nombre = "Daniel", Apellido = "Martinez", Direccion = "Mirador de arriba 843", Telefono = 538431 }
         };
+
+        private static int _nextId = _clientes.Max(c => c.Id) + 1;
 
         // GET: api/clientes
         [HttpGet]
@@ -25,10 +28,14 @@ namespace API1.Controller
 
         // GET: api/clientes/{Rut}
         [HttpGet("{Rut}")]
-        public Cliente Get(int Rut)
+        public ActionResult<Cliente> Get(int Rut)
         {
-            Cliente resultado = _clientes.FirstOrDefault(c => c.Rut == Rut);
-            return resultado;
+            var cliente = _clientes.FirstOrDefault(c => c.Rut == Rut);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            return cliente;
         }
 
         // POST: api/clientes
@@ -40,36 +47,51 @@ namespace API1.Controller
                 return BadRequest("Ya existe un cliente con el mismo RUT.");
             }
 
+            if (_clientes.Any(c => c.Nombre.Equals(cliente.Nombre, System.StringComparison.OrdinalIgnoreCase)))
+            {
+                return BadRequest("Ya existe un cliente con el mismo nombre.");
+            }
+
+            cliente.Id = _nextId++;
             _clientes.Add(cliente);
-            return CreatedAtAction(nameof(Cliente), new { rut = cliente.Rut }, cliente);
+            return CreatedAtAction(nameof(Get), new { rut = cliente.Rut }, cliente);
         }
 
-        // PUT: api/clientes/{Rut}
+        // PUT: api/clientes/{Id}
         [HttpPut("{Rut}")]
-        public void Put(int Rut, [FromBody] Cliente cliente)
+        public IActionResult Put(int Rut, [FromBody] Cliente cliente)
         {
             var clienteExistente = _clientes.FirstOrDefault(c => c.Rut == Rut);
-            if (clienteExistente != null)
-            {
-                clienteExistente.Nombre = cliente.Nombre;
-                clienteExistente.Apellido = cliente.Apellido;
-            }
             if (clienteExistente == null)
             {
-                _clientes.Add(cliente);
+                return NotFound();
             }
-            else
+
+            if (_clientes.Any(c => c.Nombre.Equals(cliente.Nombre, System.StringComparison.OrdinalIgnoreCase) && c.Rut != Rut))
             {
-                _clientes.Remove(clienteExistente);
-                _clientes.Add(cliente);
+                return BadRequest("Ya existe un cliente con el mismo nombre.");
             }
+
+            clienteExistente.Nombre = cliente.Nombre;
+            clienteExistente.Apellido = cliente.Apellido;
+            clienteExistente.Direccion = cliente.Direccion;
+            clienteExistente.Telefono = cliente.Telefono;
+
+            return NoContent();
         }
 
         // DELETE: api/clientes/{Rut}
-        [HttpDelete("{Rut}")]
-        public void Delete(int Rut)
+        [HttpDelete("{Id}")]
+        public IActionResult Delete(int Id)
         {
-            _clientes.Remove(_clientes.FirstOrDefault(c => c.Rut == Rut));
+            var cliente = _clientes.FirstOrDefault(c => c.Id == Id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            _clientes.Remove(cliente);
+            return NoContent();
         }
     }
 }

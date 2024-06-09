@@ -1,9 +1,9 @@
-﻿using API1;
+﻿using Hola;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace API1.Controllers
+namespace Hola.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,46 +11,81 @@ namespace API1.Controllers
     {
         private static IList<Producto> _productos = new List<Producto>()
         {
-            new Producto { id = 1, Nombre = "Caja de Tornillos", Precio = 3500, Descripcion = "Caja con 100 tornillos de 3ra" },
-            new Producto { id = 2, Nombre = "Caja de Tuercas", Precio = 4000, Descripcion = "Caja con 100 tuercas de M16" },
-            new Producto { id = 3, Nombre = "Taladro", Precio = 75000, Descripcion = "Taladro eléctrico inhalambrico" },
-            new Producto { id = 4, Nombre = "Martillo", Precio = 10000, Descripcion = "Martillo para clavos" }
+            new Producto(1, "Caja de Tornillos", 3500, "Caja con 100 tornillos de 3ra"),
+            new Producto(2, "Caja de Tuercas", 4000, "Caja con 100 tuercas de M16"),
+            new Producto(3, "Taladro", 75000, "Taladro eléctrico inhalambrico"),
+            new Producto(4, "Martillo", 10000, "Martillo para clavos")
         };
 
-        // GET: api/<ProductoController>
+        private static int _nextId = _productos.Max(p => p.Id) + 1;
+
+        // GET: api/productos
         [HttpGet]
         public IEnumerable<Producto> Get()
         {
             return _productos;
         }
 
-        // GET api/<ProductoController>/5
+        // GET: api/productos/{id}
         [HttpGet("{id}")]
-        public Producto Get(int id)
+        public ActionResult<Producto> Get(int id)
         {
-            return _productos.FirstOrDefault(p => p.id == id);
+            var producto = _productos.FirstOrDefault(p => p.Id == id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+            return producto;
         }
 
-        // POST api/<ProductoController>
+        // POST: api/productos
         [HttpPost]
-        public void Post([FromBody] Producto value)
+        public IActionResult Post([FromBody] Producto producto)
         {
-            _productos.Add(value);
+            if (producto.Precio <= 0)
+            {
+                return BadRequest("El precio debe ser positivo.");
+            }
+
+            producto.Id = _nextId++;
+            _productos.Add(producto);
+            return CreatedAtAction(nameof(Get), new { id = producto.Id }, producto);
         }
 
-        // PUT api/<ProductoController>/5
+        // PUT: api/productos/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Producto value)
+        public IActionResult Put(int id, [FromBody] Producto producto)
         {
-            Producto indiceProducto = _productos.FirstOrDefault(p => p.id == id);
-            _productos[_productos.IndexOf(indiceProducto)] = value;
+            var productoExistente = _productos.FirstOrDefault(p => p.Id == id);
+            if (productoExistente == null)
+            {
+                return NotFound();
+            }
+
+            if (producto.Precio <= 0)
+            {
+                return BadRequest("El precio debe ser positivo.");
+            }
+
+            productoExistente.Nombre = producto.Nombre;
+            productoExistente.Precio = producto.Precio;
+            productoExistente.Descripcion = producto.Descripcion;
+
+            return NoContent();
         }
 
-        // DELETE api/<ProductoController>/5
+        // DELETE: api/productos/{id}
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _productos.Remove(_productos.FirstOrDefault(p => p.id == id));
+            var producto = _productos.FirstOrDefault(p => p.Id == id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            _productos.Remove(producto);
+            return NoContent();
         }
     }
 }
