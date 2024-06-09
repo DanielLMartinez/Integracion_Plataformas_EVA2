@@ -1,34 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+﻿using API1;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Hola.Controller
+namespace API1.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private static IList<Cliente> _clientes = new List<Cliente>();
+
+        private static IList<Cliente> _clientes = new List<Cliente>()
+        {
+            new Cliente {  Rut = 12345678-9, Nombre = "Sebastian", Apellido = "Contreras", Direccion = "Av siempre viva 0110", Telefono = 1733737 },
+            new Cliente {  Rut = 17524577-2, Nombre = "Augusto", Apellido = "Pfeifer", Direccion = "Av calle del piso 1234", Telefono = 693463464 },
+            new Cliente {  Rut = 16345455-3, Nombre = "Sergio", Apellido = "Mellado", Direccion = "pasaje callado 584", Telefono = 618861168 },
+            new Cliente {  Rut = 26756563-6, Nombre = "Daniel", Apellido = "Martinez", Direccion = "Mirador de arriba 843", Telefono = 538431 }
+        };
 
         // GET: api/clientes
         [HttpGet]
-        public ActionResult<IEnumerable<Cliente>> Get()
+        public IEnumerable<Cliente> Get()
         {
-            // Devuelve la lista de clientes
-            return Ok(_clientes);
+            return _clientes;
         }
 
         // GET: api/clientes/{Rut}
         [HttpGet("{Rut}")]
-        public ActionResult<Cliente> Get(int Rut)
+        public Cliente Get(int Rut)
         {
-            var cliente = _clientes.FirstOrDefault(c => c.Rut == Rut);
-            if (cliente == null)
-            {
-                // Devuelve un error 404 si el cliente no se encuentra
-                return NotFound("Cliente no encontrado");
-            }
-            return Ok(cliente);
+            Cliente resultado = _clientes.FirstOrDefault(c => c.Rut == Rut);
+            return resultado;
         }
 
         // POST: api/clientes
@@ -37,52 +37,39 @@ namespace Hola.Controller
         {
             if (_clientes.Any(c => c.Rut == cliente.Rut))
             {
-                // Devuelve un error 400 si el cliente ya existe
                 return BadRequest("Ya existe un cliente con el mismo RUT.");
             }
 
-            // Agrega el cliente a la lista
             _clientes.Add(cliente);
-
-            // Devuelve un código 201 (Created) y la URL de la nueva entidad
-            return CreatedAtAction(nameof(Get), new { Rut = cliente.Rut }, cliente);
+            return CreatedAtAction(nameof(Cliente), new { rut = cliente.Rut }, cliente);
         }
 
         // PUT: api/clientes/{Rut}
         [HttpPut("{Rut}")]
-        public IActionResult Put(int Rut, [FromBody] Cliente cliente)
+        public void Put(int Rut, [FromBody] Cliente cliente)
         {
             var clienteExistente = _clientes.FirstOrDefault(c => c.Rut == Rut);
+            if (clienteExistente != null)
+            {
+                clienteExistente.Nombre = cliente.Nombre;
+                clienteExistente.Apellido = cliente.Apellido;
+            }
             if (clienteExistente == null)
             {
-                // Devuelve un error 404 si el cliente no se encuentra
-                return NotFound("Cliente no encontrado");
+                _clientes.Add(cliente);
             }
-
-            // Actualiza el nombre y apellido del cliente
-            clienteExistente.Nombre = cliente.Nombre;
-            clienteExistente.Apellido = cliente.Apellido;
-
-            // Devuelve un código 204 (NoContent) indicando que la actualización fue exitosa
-            return NoContent();
+            else
+            {
+                _clientes.Remove(clienteExistente);
+                _clientes.Add(cliente);
+            }
         }
 
         // DELETE: api/clientes/{Rut}
         [HttpDelete("{Rut}")]
-        public IActionResult Delete(int Rut)
+        public void Delete(int Rut)
         {
-            var clienteExistente = _clientes.FirstOrDefault(c => c.Rut == Rut);
-            if (clienteExistente == null)
-            {
-                // Devuelve un error 404 si el cliente no se encuentra
-                return NotFound("Cliente no encontrado");
-            }
-
-            // Elimina el cliente de la lista
-            _clientes.Remove(clienteExistente);
-
-            // Devuelve un código 204 (NoContent) indicando que la eliminación fue exitosa
-            return NoContent();
+            _clientes.Remove(_clientes.FirstOrDefault(c => c.Rut == Rut));
         }
     }
 }

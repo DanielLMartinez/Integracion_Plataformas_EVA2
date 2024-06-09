@@ -1,68 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+﻿using API1;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Hola.Controllers
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace API1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ProductoController : ControllerBase
     {
-        private static IList<Producto> _productos = new List<Producto>();
+        private static IList<Producto> _productos = new List<Producto>()
+        {
+            new Producto { id = 1, Nombre = "Caja de Tornillos", Precio = 3500, Descripcion = "Caja con 100 tornillos de 3ra" },
+            new Producto { id = 2, Nombre = "Caja de Tuercas", Precio = 4000, Descripcion = "Caja con 100 tuercas de M16" },
+            new Producto { id = 3, Nombre = "Taladro", Precio = 75000, Descripcion = "Taladro eléctrico inhalambrico" },
+            new Producto { id = 4, Nombre = "Martillo", Precio = 10000, Descripcion = "Martillo para clavos" }
+        };
 
-        // GET: api/producto
+        // GET: api/<ProductoController>
         [HttpGet]
-        public ActionResult<IEnumerable<Producto>> Get()
+        public IEnumerable<Producto> Get()
         {
-            return Ok(_productos);
+            return _productos;
         }
 
-        // GET api/producto/5
+        // GET api/<ProductoController>/5
         [HttpGet("{id}")]
-        public ActionResult<Producto> Get(int id)
+        public Producto Get(int id)
         {
-            var producto = _productos.FirstOrDefault(p => p.id == id);
-            if (producto == null)
-            {
-                return NotFound("Producto no encontrado");
-            }
-            return Ok(producto);
+            return _productos.FirstOrDefault(p => p.id == id);
         }
 
-        // POST api/producto
+        // POST api/<ProductoController>
         [HttpPost]
-        public IActionResult Post([FromBody] Producto value)
+        public void Post([FromBody] Producto value)
         {
             _productos.Add(value);
-            return CreatedAtAction(nameof(Get), new { id = value.id }, value);
         }
 
-        // PUT api/producto/5
+        // PUT api/<ProductoController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Producto value)
+        public void Put(int id, [FromBody] Producto value)
         {
-            var productoExistente = _productos.FirstOrDefault(p => p.id == id);
-            if (productoExistente == null)
-            {
-                return NotFound("Producto no encontrado");
-            }
-
-            _productos[_productos.IndexOf(productoExistente)] = value;
-            return NoContent();
+            Producto indiceProducto = _productos.FirstOrDefault(p => p.id == id);
+            _productos[_productos.IndexOf(indiceProducto)] = value;
         }
 
-        // DELETE api/producto/5
+        // DELETE api/<ProductoController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public void Delete(int id)
         {
-            var productoExistente = _productos.FirstOrDefault(p => p.id == id);
-            if (productoExistente == null)
-            {
-                return NotFound("Producto no encontrado");
-            }
-
-            _productos.Remove(productoExistente);
-            return NoContent();
+            _productos.Remove(_productos.FirstOrDefault(p => p.id == id));
         }
     }
 }
