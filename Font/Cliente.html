@@ -4,50 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Usuario y Productos</title>
-    <link rel="stylesheet" href="styles.css">
+    <!--<link rel="stylesheet" href="css/Cliente.css"> -->
 </head>
 <body>
     <div class="form-section">
         <h2>Cliente</h2>
-        <label for="user-name">Nombre:</label>
-        <select id="user-name">
-            <option value="Juan">Juan</option>
-            <option value="Maria">Maria</option>
-            <option value="Pedro">Pedro</option>
+        <label for="Cli_Nombre">Nombre:</label>
+        <select id="Cli_Nombre">
+        
         </select>
         
-        <label for="user-rut">RUT:</label>
-        <input type="text" id="user-rut">
+        <label for="Cli_Rut">RUT:</label>
+        <input type="text" id="Cli_Rut">
         
-        <label for="user-lastname">Apellido:</label>
-        <input type="text" id="user-lastname">
+        <label for="Cli_Apellido">Apellido:</label>
+        <input type="text" id="Cli_Apellido">
         
-        <label for="user-address">Dirección:</label>
-        <input type="text" id="user-address">
+        <label for="Cli_Direccion">Dirección:</label>
+        <input type="text" id="Cli_Direccion">
         
         <button id="add-user">Agregar</button>
         <button id="search-user">Buscar</button>
     </div>
 
     <div class="form-section">
-        <h2>Datos del Producto</h2>
-        <label for="product-name">Nombre:</label>
-        <select id="product-name">
-            <option value="Producto1">Producto1</option>
-            <option value="Producto2">Producto2</option>
-            <option value="Producto3">Producto3</option>
-        </select>
+        <h2>Producto</h2>
+        <label for="prod_Nombree">Nombre:</label>
+        <select id="prod_Nombre"></select>
         
         <label for="product-price">Precio:</label>
         <input type="number" id="product-price">
         
-        <label for="product-quantity">Cantidad:</label>
-        <input type="number" id="product-quantity">
+        <label for="prod_cantida">Cantidad:</label>
+        <input type="number" id="prod_cantiday">
         
         <button id="add-product">Agregar</button>
-        <button id="finalize">Finalizar</button>
+        <button id="Finalizar">Finalizar</button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/Cliente.js"></script>
 </body>
 </html>
