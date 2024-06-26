@@ -7,7 +7,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     background-color: #e0caf8;
-    background-image: url('6726-doctores.jpg'); /* Reemplaza con la ruta real */
+    background-image: url('ferreteria.jpg'); /* Reemplaza con la ruta real */
     background-size: cover; /* Ajusta la imagen al contenedor */
     background-repeat: no-repeat; /* No repite la imagen */
     background-position: center; /* Posiciona la imagen en el centro */
@@ -19,6 +19,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border: 2px solid #000000;
+    background-color: rgba(170, 172, 47, 0.632);
   }
   
   h1 {
