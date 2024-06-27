@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página principal</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://media.istockphoto.com/id/1460743033/es/foto/composici%C3%B3n-con-una-variedad-de-herramientas-de-metal.jpg?s=2048x2048&w=is&k=20&c=lyx7wBkeW5jyeIgJe3ceqv59cne3lv7AruRr6cuKs-8='); /* Asegúrate que la ruta sea correcta */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.832);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+            
+        }
+
+        .botones {
+            display: flex;
+            justify-content: space-between;
+            width: 300px; 
+        }
+
+        .btn-cliente, .btn-trabajador {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cliente:hover {
+            background-color: #45a049;
+        }
+
+        .btn-trabajador:hover {
+            background-color: #008CBA;
+        }
+    </style>
+    <script>
+        function irCliente() {
+            window.location.assign('index.html');
+        }
+
+        function irTrabajador() {
+            window.location.assign('../Login.html');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>BIENVENIDO</h1>
+        <h2>Escoge una opción</h2>
+        <div class="botones">
+            <button class="btn-cliente" onclick="irCliente()">Cliente</button>
+            <button class="btn-trabajador" onclick="irTrabajador()">Trabajador</button>
+        </div>
+    </div>
+</body>
+</html>

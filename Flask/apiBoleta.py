@@ -62,8 +62,16 @@ class Factura(Resource):
 api.add_resource(Factura, "/api/boleta")
 
 @app.route('/')
-def index():
+def principal():
+    return render_template('Principal.html')
+
+@app.route('/index.html')
+def cliente():
     return render_template('index.html')
+
+@app.route('/Login.html')
+def trabajador():
+    return render_template('Login.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

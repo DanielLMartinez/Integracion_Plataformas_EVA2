@@ -1,97 +1,160 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
-    <title>Cliente y Productos</title>
+    <title>Carrito de Compras</title>
     <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f067;
+            background-image: url('https://media.istockphoto.com/id/1409316216/es/foto/un-carrito-de-compras-junto-a-un-estante-de-una-ferreter%C3%ADa.jpg?s=2048x2048&w=is&k=20&c=Hm8FL8UEJToDRZC6rtKfpv3xRWXkTsytLpgIYdDxR-M=');
+            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+            background-position: center; 
+            
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.079);
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+        .product {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-color: black 2px;
+        }
+        .product img {
+            max-width: 100px;
+            margin-right: 20px;
+            
+        }
+        .product-details {
+            flex-grow: 1;
+            
+        }
+        .product-details h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .product-details p {
+            margin: 5px 0;
+        }
+        .product-details input {
+            width: 60px;
+            padding: 5px;
+            margin-top: 10px;
+            border-color: black;
+
+        }
+        .cart {
+            margin-top: 20px;
+        }
+        .cart h2 {
+            margin: 0 0 10px 0;
+        }
+        .cart p {
+            margin: 5px 0;
+        }
+        .cart button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px ;
+            cursor: pointer;
+        }
+        .boleta {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            display: none;
+        }
+        
     </style>
 </head>
-
 <body>
-    <div class="form-section">
-        <h2>Cliente</h2>
-        <label for="Cli_Rut">RUT:</label>
-        <input type="text" id="Cli_Rut">
-
-        <label for="Cli_Nombre">Nombre:</label>
-        <input type="text" id="Cli_Nombre">
-    </div>
-
-    <div class="form-section">
-        <h2>Producto</h2>
-        <label for="id_producto">ID del Producto:</label>
-        <input type="number" id="id_producto">
-
-        <label for="prod_cantidad">Cantidad:</label>
-        <input type="number" id="prod_cantidad">
-
-        <button id="submit">Generar Boleta</button>
-    </div>
-
-    <div class="form-section" id="resultado">
-        <h2>Boleta</h2>
-        <div id="boleta"></div>
+    <div class="container">
+        <h1>Ferramas</h1>
+        <h2>¡Tu mejor socio!</h2>
+        <div class="product">
+            <img src="https://grupovector.cl/wp-content/uploads/2022/10/Imagen3.jpg" alt="Producto">
+            <div class="product-details">
+                <h2>Clavos</h2>
+                <p>Precio: $10.000</p>
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" value="1" min="1">
+            </div>
+        </div>
+        <div class="product">
+            <img src="http://www.hidapi.com/503-large_default/martillo-saca-clavo-delta.jpg" alt="Producto">
+            <div class="product-details">
+                <h2>Martillo</h2>
+                <p>Precio: $5.000</p>
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" value="1" min="1">
+            </div>
+        </div>
+        <div class="cart">
+            <h2>Carrito de Compras</h2>
+            <p><strong>Total:</strong> $<span id="total">100</span></p>
+            <button id="comprar">Comprar</button>
+        </div>
+        <div class="boleta" id="boleta">
+            <h2>Boleta</h2>
+            <p><strong>ID Boleta:</strong> 12345</p>
+            <p><strong>Cliente:</strong></p>
+            <ul>
+                <li><strong>ID Cliente:</strong> 1</li>
+                <li><strong>Nombre Cliente:</strong> Juan Pérez</li>
+                <li><strong>Dirección Cliente:</strong> Calle Falsa 123</li>
+            </ul>
+            <p><strong>Items:</strong></p>
+            <ul id="boleta-items">
+                <!-- Detalles de los items -->
+            </ul>
+            <p><strong>Total Boleta:</strong> $<span id="boleta-total">100</span></p>
+        </div>
     </div>
 
     <script>
-        document.getElementById("submit").addEventListener("click", function () {
-            const rut = document.getElementById("Cli_Rut").value;
-            const idProducto = document.getElementById("id_producto").value;
-            const cantidad = document.getElementById("prod_cantidad").value;
-
-            if (!rut || !idProducto || !cantidad) {
-                alert("Por favor complete todos los campos");
-                return;
-            }
-
-            const data = {
-                Rut: rut,
-                id_producto: idProducto,
-                cantidad: cantidad
-            };
-
-            fetch("http://localhost:5001/api/boleta", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const boletaElement = document.getElementById("boleta");
-                    boletaElement.innerHTML = `
-                        <p><strong>ID Boleta:</strong> ${data.id_boleta}</p>
-                        <p><strong>Cliente:</strong></p>
-                        <ul>
-                            <li><strong>ID Cliente:</strong> ${data.cliente.id_cliente}</li>
-                            <li><strong>Nombre Cliente:</strong> ${data.cliente.nombre_cliente}</li>
-                            <li><strong>Dirección Cliente:</strong> ${data.cliente.direccion_cliente}</li>
-                        </ul>
-                        <p><strong>Items:</strong></p>
-                        <ul>
-                            ${data.items.map(item => `
-                                <li>
-                                    <strong>ID Producto:</strong> ${item.id_producto}<br>
-                                    <strong>Nombre Producto:</strong> ${item.nombre_producto}<br>
-                                    <strong>Precio Unitario:</strong> ${item.precio_unitario}<br>
-                                    <strong>Cantidad:</strong> ${item.cantidad}<br>
-                                    <strong>Total Item:</strong> ${item.total_item}
-                                </li>
-                            `).join('')}
-                        </ul>
-                        <p><strong>Total Boleta:</strong> ${data.total_boleta}</p>
-                    `;
-                    document.getElementById("resultado").style.display = "block";
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
+        document.getElementById('cantidad').addEventListener('input', function () {
+            const cantidad = parseInt(this.value);
+            const precioUnitario = 100;
+            const total = cantidad * precioUnitario;
+            document.getElementById('total').innerText = total;
         });
+
+        document.getElementById('comprar').addEventListener('click', function () {
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const precioUnitario = 100;
+            const total = cantidad * precioUnitario;
+
+            document.getElementById('boleta-items').innerHTML = `
+                <li>
+                    <strong>ID Producto:</strong> 1<br>
+                    <strong>Nombre Producto:</strong> Producto XYZ<br>
+                    <strong>Precio Unitario:</strong> $100<br>
+                    <strong>Cantidad:</strong> ${cantidad}<br>
+                    <strong>Total Item:</strong> $${total}
+                </li>
+            `;
+            document.getElementById('boleta-total').innerText = total;
+            document.getElementById('boleta').style.display = 'block';
+        });
+        
     </script>
 </body>
-
 </html>

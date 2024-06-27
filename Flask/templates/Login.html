@@ -3,11 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
-    <link rel="stylesheet" href="Login.css">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://media.istockphoto.com/id/1586524526/es/foto/retrato-de-un-empleado-minorista-que-trabaja-en-una-ferreter%C3%ADa.jpg?s=2048x2048&w=is&k=20&c=pqiW23prKm-2lATNPxf9nJfsgP6dVqXJ-UmGWOYKySI=');
+            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+            background-position: center; /* Centra la imagen */
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.832); /* Semitransparencia de fondo */
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+            width: 300px; /* Ajuste de ancho */
+        }
+
+        h1 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px; /* Espaciado entre botones */
+        }
+
+        .btn:hover {
+            background-color: #45a049; /* Verde más oscuro */
+        }
+
+        .btn-secondary {
+            background-color: #008CBA; /* Azul */
+        }
+
+        .btn-secondary:hover {
+            background-color: #007bb5; /* Azul más oscuro */
+        }
+    </style>
 </head>
 <body>
-    <div class="contenedor">
+    <div class="container">
         <h1>Inicio de Sesión</h1>
         <form action="#">
             <label for="usuario">Usuario:</label>
@@ -16,9 +86,8 @@
             <label for="contrasena">Contraseña:</label>
             <input type="password" id="contrasena" name="contrasena" required>
 
-            <button type="submit" name="Ini_Sesión">Iniciar Sesión</button>
-            <br>
-            <button type="submit" name="Recu_Contraseña">Recuperar Contraseña</button>
+            <button type="submit" class="btn" name="Ini_Sesión">Iniciar Sesión</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='recuperar_contrasena.html'">Recuperar Contraseña</button>
         </form>
     </div>
 </body>
