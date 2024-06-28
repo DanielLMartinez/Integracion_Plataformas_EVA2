@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Producto</title>
+    <title>Gestion de Pedidos Pendientes</title>
     <style>
         body {
             font-family: sans-serif;
             margin: 0;
             padding: 20px;
             background-image: url('https://media.istockphoto.com/id/1306120628/es/foto/ferreter%C3%ADa.jpg?s=2048x2048&w=is&k=20&c=HYfqfvbJXYJ25TNhHk4ET671QdM6knJKaVlnzw04xQ8=');
+            background-size: cover;
         }
 
         .container {
             background-color: #939393d1;
             padding: 40px;
-            border-radius: 10px ;
+            border-radius: 10px;
             box-shadow: 0 0 9px rgba(0, 0, 0, 0.1);
-            width: 60%;
-            max-width: 600px;
+            width: 80%;
+            max-width: 800px;
             margin: 30px auto;
-            
         }
 
         h1 {
@@ -28,28 +28,26 @@
             margin-bottom: 20px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        input[type="text"],
-        input[type="number"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #030303;
-            border-radius: 5px;
-            margin-bottom: 15px;
+        table, th, td {
+            border: 1px solid black;
         }
 
-        textarea {
-            width: 100%;
-            height: 150px;
+        th, td {
             padding: 10px;
-            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #030303;
             border-radius: 5px;
-            margin-bottom: 15px;
+            width: 100%;
         }
 
         button {
@@ -78,50 +76,78 @@
 </head>
 <body>
     <div class="container">
-        <h1>Agregar Producto</h1>
+        <h1>Gestionar Pedidos Pendientes</h1>
 
-        <form id="productForm">
-            <label for="id">ID Producto:</label>
-            <input type="number" id="id" name="id" required>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Boleta</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="orderTableBody">
+                <!-- Aquí se agregarán las filas de los pedidos pendientes -->
+            </tbody>
+        </table>
 
-            <label for="nombre">Nombre Producto:</label>
-            <input type="text" id="nombre" name="nombre" required>
-
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" name="precio" step="0.01" required>
-
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" required></textarea>
-
-            <label for="imagen">Imagen de Referencia:</label>
-            <input type="file" id="imagen" name="imagen">
-
-            <button type="submit">Agregar Producto</button>
-
-            <div class="success" id="successMessage">
-                Producto agregado con éxito!
-            </div>
-        </form>
+        <div class="success" id="successMessage">
+            Pedido actualizado con éxito!
+        </div>
     </div>
 
     <script>
-        const productForm = document.getElementById('productForm');
+        // Simulación de pedidos pendientes obtenidos de la API
+        const pedidosPendientes = [
+            { id_boleta: '12345678', cliente: 'Juan Pérez', estado: 'Pendiente' },
+            { id_boleta: '87654321', cliente: 'Ana Gómez', estado: 'Pendiente' },
+            { id_boleta: '56781234', cliente: 'Luis Martínez', estado: 'Pendiente' }
+        ];
+
+        const orderTableBody = document.getElementById('orderTableBody');
         const successMessage = document.getElementById('successMessage');
 
-        productForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+        function renderTable() {
+            orderTableBody.innerHTML = '';
+            pedidosPendientes.forEach(pedido => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${pedido.id_boleta}</td>
+                    <td>${pedido.cliente}</td>
+                    <td>
+                        <select data-id="${pedido.id_boleta}">
+                            <option value="Pendiente" ${pedido.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                            <option value="En proceso" ${pedido.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
+                            <option value="Listo para despacho" ${pedido.estado === 'Listo para despacho' ? 'selected' : ''}>Listo para despacho</option>
+                            <option value="Despachado" ${pedido.estado === 'Despachado' ? 'selected' : ''}>Despachado</option>
+                        </select>
+                    </td>
+                    <td><button onclick="updateOrder(${pedido.id_boleta})">Actualizar</button></td>
+                `;
+                orderTableBody.appendChild(row);
+            });
+        }
 
-            const formData = new FormData(productForm); // Create form data object
+        function updateOrder(id_boleta) {
+            const selectElement = document.querySelector(`select[data-id="${id_boleta}"]`);
+            const newEstado = selectElement.value;
 
-            // Send the form data to the server using AJAX or other methods
-            // (This part is not included in this example)
+            // Aquí se enviaría una solicitud a la API para actualizar el estado del pedido
+            // (Esta parte no está incluida en este ejemplo)
 
-            // Simulate successful submission and display success message
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 2000); // Hide success message after 2 seconds
-        });
+            // Simulación de la actualización del estado del pedido
+            const pedido = pedidosPendientes.find(p => p.id_boleta === id_boleta);
+            if (pedido) {
+                pedido.estado = newEstado;
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 2000); // Ocultar el mensaje de éxito después de 2 segundos
+            }
+        }
+
+        renderTable();
     </script>
 </body>
 </html>
