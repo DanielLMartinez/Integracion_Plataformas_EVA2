@@ -29,13 +29,13 @@ const registraUsuario = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { usuario, contrasena } = req.body;
 
   try {
-    const resultado = await authModel.getUserByUsername(username);
-    const matchPass = await bcrypt.compare(password, resultado.contrasenia_hash);
+    const resultado = await authModel.getUserByUsername(usuario);
+    const matchPass = await bcrypt.compare(contrasena, resultado.contrasenia_hash);
     if (matchPass) {
-      const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.cookie('token', token, { httpOnly: true })
       return res.status(200).send({ message: "Inicio de sesión exitoso"});
     }

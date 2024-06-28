@@ -73,5 +73,9 @@ def cliente():
 def trabajador():
     return render_template('Login.html')
 
+@app.route('/Addprod.html')
+def indexTrabajador():
+    return render_template('Addprod.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

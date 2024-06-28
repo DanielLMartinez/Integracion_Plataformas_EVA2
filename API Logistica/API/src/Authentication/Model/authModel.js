@@ -41,11 +41,13 @@ const registraUsuario = async (rut_empleado, username, password, pnombre, snombr
 const getUserByUsername = async (username) => {
   const client = await pool.connect();
   const queryString =
-    'SELECT u.id_usuario, u.nombre_usuario, c.contrasenia_hash ' +
-    'FROM usuario u ' +
-    'INNER JOIN contraseña c ON u.id_usuario = c.id_usuario ' +
-    'WHERE u.nombre_usuario = $1';
+      'SELECT u.id_usuario, u.nombre_usuario, c.contrasenia_hash ' +
+      'FROM usuario u ' +
+      'INNER JOIN contraseña c ON u.id_usuario = c.id_usuario ' +
+      'WHERE u.nombre_usuario = $1';
+  console.log(queryString); // Imprime la consulta SQL
   const result = await client.query(queryString, [username]);
+  console.log(result.rows); // Imprime el resultado de la consulta
   return result.rows[0];
 };
 
