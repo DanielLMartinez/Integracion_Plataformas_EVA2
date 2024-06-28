@@ -229,7 +229,7 @@
             <!-- Productos aquí -->
         </div>
         <div class="cart">
-            <h2>Productos Seleccionados</h2>
+            <h2>Producto Seleccionado</h2>
             <ul class="cart-items" id="cart-items"></ul>
             <p><strong>Total:</strong> $<span id="total">0</span></p>
             <button id="comprar">Comprar</button>
@@ -252,6 +252,8 @@
             <input type="text" id="cliente-rut">
             <label for="cliente-direccion">Dirección:</label>
             <input type="text" id="cliente-direccion">
+            <label for="cliente-correo">Correo:</label>
+            <input type="text" id="cliente-correo">
             <button id="continuar">Continuar</button>
         </div>
     </div>
@@ -347,11 +349,13 @@
             const apellido = document.getElementById('cliente-apellido').value;
             const rut = document.getElementById('cliente-rut').value;
             const direccion = document.getElementById('cliente-direccion').value;
+            const correo = document.getElementById('cliente-correo').value;
 
             const cliente = {
                 id_cliente: rut,
-                nombre_cliente: `${nombre} ${apellido}`,
-                direccion_cliente: direccion
+                nombre_cliente: `${nombre} `,
+                direccion_cliente: direccion,
+                cliente_correo: correo
             };
 
             clienteDetalle.innerText = `${cliente.nombre_cliente}, ${cliente.direccion_cliente}`;
