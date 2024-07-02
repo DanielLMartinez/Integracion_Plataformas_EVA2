@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "apis2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/FerroMas/apis/FerroMas",
+      "type": "apis.azure"
+    }
+  }
+}
