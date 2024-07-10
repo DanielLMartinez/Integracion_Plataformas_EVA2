@@ -72,6 +72,7 @@ def getProductos():
 def getProducto(id):
     return listaProducto.index(id)
 
+
 @app.post("/producto")
 def insertaProducto():
     json = request.get_json()

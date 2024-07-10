@@ -9,8 +9,8 @@ app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-url_cliente = "http://localhost:5009/api/Cliente"
-url_producto = "http://localhost:5009/api/Producto"
+url_cliente = "https://apiferromas.azurewebsites.net/api/Cliente"
+url_producto = "https://apiferromas.azurewebsites.net/api/Producto"
 
 def generar_id_boleta():
     return str(random.randint(10000000, 99999999))
