@@ -75,6 +75,9 @@
     </style>
 </head>
 <body>
+    <navbar>
+        <button onclick= cerrarSesion()>Cerrar Sesión</button>
+    </navbar>
     <div class="container">
         <h1>Gestionar Pedidos Pendientes</h1>
 
@@ -98,6 +101,12 @@
     </div>
 
     <script>
+
+        function cerrarSesion(){
+            localStorage.removeItem('token');
+            window.location.href = '/Login.html';
+        }
+
         // Simulación de pedidos pendientes obtenidos de la API
         const pedidosPendientes = [
             { id_boleta: '12345678', cliente: 'Juan Pérez', estado: 'Pendiente' },
